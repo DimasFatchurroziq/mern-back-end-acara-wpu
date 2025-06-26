@@ -1,13 +1,12 @@
 import app from './app.js';
 import router from './routes/api.route.js';
 import connect from './config/database.config.js';
+import { PORT } from './config/env.config.js';
 
 
 const init = async () => {
     try{
         await connect();
-        
-        const PORT = 3000;
 
         app.use('/api', router);
         

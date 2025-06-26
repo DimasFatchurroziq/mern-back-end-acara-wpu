@@ -1,17 +1,6 @@
 import mongoose from "mongoose";
 import { encrypt } from "../utils/encryption.util.js";
-
-export interface User {
-    fullName : string;
-    username : string;
-    email : string;
-    password : string;
-    role : string;
-    profilePicture : string;
-    isActive : boolean;
-    activationCode : string;
-    createdAt?: Date;
-}
+import { User } from "../interfaces/user.interface.js";
 
 const Schema = mongoose.Schema;
 

@@ -3,6 +3,7 @@ import userModel from "../models/user.model.js";
 import { CreateUserInput, LoginUserInput } from "../validations/user.schema.js";
 import { encrypt } from "../utils/encryption.util.js";
 import { generateToken } from "../utils/jwt.util.js";
+import { IReqUser } from "../middlewares/auth.middleware.js";
 
 
 export const authController = {
@@ -73,5 +74,27 @@ export const authController = {
         } catch (error){
             next(error);
         } 
+    },
+
+    async me(req: IReqUser, res: Response, next: NextFunction): Promise<void> {
+        try{
+            const user = req.user;
+            const result = await userModel.findById(user?.id);
+
+            if (!result) {
+                res.status(404).json({
+                    message: "User profile not found.", // Atau "Invalid user ID in token."
+                    data: null,
+                });
+                return;
+            }
+
+            res.status(200).json({
+                message: "Success get profile user",
+                data: result,
+            });
+        } catch (error) {
+            next(error);
+        }
     }
 }
