@@ -23,6 +23,12 @@ export const authController = {
     },
 
     async login(req: Request<{}, {}, LoginUserInput, {}>, res: Response, next: NextFunction): Promise<void> {
+        /**
+         #swagger.requestBody = {
+            required = true,
+            schema = {$ref: "#/components/schemas/LoginRequest"}
+         }
+         */
         try {
 
             const { password } = req.body;
@@ -77,6 +83,11 @@ export const authController = {
     },
 
     async me(req: IReqUser, res: Response, next: NextFunction): Promise<void> {
+        /**
+         #swagger.security = [{
+            "bearerAuth": []
+        }]
+         */
         try{
             const user = req.user;
             const result = await userModel.findById(user?.id);
