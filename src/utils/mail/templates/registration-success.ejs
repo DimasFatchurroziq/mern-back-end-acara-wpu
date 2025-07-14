@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./output.css">
+</head>
+<body class="bg-[#f4f4f4]">
+    <div class="w-full flex flex-col items-center p-4">
+        <div class="relative min-h-150 flex flex-col bg-[#ffffff] w-150 h-150 border-gray-300 border-2">
+            <div class="w-full justify-center items-center bg-[#4caf50]">
+                <p class="text-center text-white text-4xl font-bold p-8">Selamat Datang!</p>
+            </div>
+            <div class="m-4">
+                <div class="flex flex-col">
+                    <p class="my-4">Halo <%= username %></p>
+                    <p class="">Terima kasih telah mendaftar dilayanan kami. Berikut adalah informasi dari akun Anda:</p>
+                    <ul class="m-4">
+                        <li class="font-bold">Nama: <span class="font-normal"><%= fullName %></span></li>
+                        <li class="font-bold">Email: <span class="font-normal"><%= email %></span></li>
+                        <li class="font-bold">Tanggal Pendaftaran: <span class="font-normal"><%= createdAt %></span></li>
+                    </ul>
+                    <p>Untuk memulai, silahkan klik tombol dibawah ini:</p>
+                    <a href="<%= activationLink %>" class="bg-[#4caf50] font-medium p-3 border border-white rounded-2xl w-50 text-center mx-auto my-4 hover:bg-white hover:border hover:border-gray-500 hover:text-green-700 transition-colors duration-300">Aktifkan Akun</a>
+                    <p class="mb-4">Jika Anda memiliki pertanyaan, jangan ragu untuk menghubungi kami.</p>
+                    <p>Salam hangat, ACARA</p>
+                </div>
+            </div>
+            <div class="w-full py-4 bg-gray-300 absolute bottom-0">
+                <p class="text-center text-gray-600 font-medium">&copy; 2024 ACARA Event Management System. Semua HAK Dilindungi</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

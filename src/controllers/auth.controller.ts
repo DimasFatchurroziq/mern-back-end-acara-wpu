@@ -23,12 +23,6 @@ export const authController = {
     },
 
     async login(req: Request<{}, {}, LoginUserInput, {}>, res: Response, next: NextFunction): Promise<void> {
-        /**
-         #swagger.requestBody = {
-            required = true,
-            schema = {$ref: "#/components/schemas/LoginRequest"}
-         }
-         */
         try {
 
             const { password } = req.body;
@@ -49,7 +43,8 @@ export const authController = {
                     {
                         username: identifier,
                     }
-                ]
+                ],
+                isActive : true,
             });
             
             if(!userByIdentifier){
@@ -106,6 +101,31 @@ export const authController = {
             });
         } catch (error) {
             next(error);
+        }
+    },
+
+    async activation(req: Request, res: Response, next: NextFunction) {
+        try{
+            const { code } = req.body;
+
+            const user = await userModel.findOneAndUpdate(
+                {
+                    activationCode : code,
+                },
+                {
+                    isActive : true,
+                },
+                {
+                    new : true,
+                }
+            );
+
+            res.status(200).json({
+                message: "Success activation user",
+                data: user,
+            });
+        } catch (error) {
+            next(error)
         }
     }
 }
