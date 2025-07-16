@@ -16,7 +16,7 @@ export const validate = (schema: ValidationSchema) =>
           res.status(400).json({ error: result.error.flatten() });
           return;
         }
-        req.body = result.data;
+        Object.assign(req.body, result.data);
       }
 
       if (schema.params) {
@@ -25,7 +25,7 @@ export const validate = (schema: ValidationSchema) =>
           res.status(400).json({ error: result.error.flatten() });
           return;
         }
-        req.params = result.data;
+        Object.assign(req.params, result.data);
       }
 
       if (schema.query) {
@@ -34,7 +34,7 @@ export const validate = (schema: ValidationSchema) =>
           res.status(400).json({ error: result.error.flatten() });
           return;
         }
-        req.query = result.data;
+        Object.assign(req.query, result.data);
       }
 
       next();

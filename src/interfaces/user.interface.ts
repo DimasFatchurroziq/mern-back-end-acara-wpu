@@ -6,6 +6,6 @@ export interface User {
     role : string;
     profilePicture : string;
     isActive : boolean;
-    activationCode : string;
+    activationCode? : string | null;
     createdAt?: Date;
 }

@@ -91,33 +91,32 @@
       }
     },
     "/auth/activation": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ActivationRequest"
-              }
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Activate user account",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "abcdef"
             },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/ActivationRequest"
-              }
-            }
+            "description": "Activation code sent to the user's email"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Activation successful"
+          },
+          "400": {
+            "description": "Invalid or expired activation code"
           }
         }
       }
     }
+
   },
   "components": {
     "securitySchemes": {

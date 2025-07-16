@@ -25,6 +25,12 @@ export const loginUserSchema = z.object({
 
 export type LoginUserInput = z.infer<typeof loginUserSchema>;
 
+export const activateUserSchema = z.object({
+  code: z.string().min(1, "Activation code is required.")
+    .regex(/^[a-fA-F0-9]{128}$/, "Invalid activation code format.")
+});
+
+export type ActivateUserInput = z.infer<typeof activateUserSchema>;
 
 // export const userIdParamsSchema = z.object({
 //   userId: z.string().length(24, "Invalid MongoDB ObjectId"),
