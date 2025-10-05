@@ -11,7 +11,7 @@ export const authController = {
             const { fullName, username, email, password } = req.body;
 
             const existingUserByUsername = await userModel.findOne({
-                email,
+                username,
             });
 
             if (existingUserByUsername) {

@@ -22,7 +22,7 @@ export const EMAIL_SMTP_USER: string = process.env.EMAIL_SMTP_USER || "";
 
 export const EMAIL_SMTP_PASS: string = process.env.EMAIL_SMTP_PASS || "";
 
-export const CLIENT_HOST: string = process.env.CLIENT_HOST || "http://localhost:3001";
+export const CLIENT_HOST: string = process.env.CLIENT_HOST || "http://localhost:3000/api"; 
 
 
 
