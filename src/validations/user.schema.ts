@@ -15,11 +15,11 @@ export const createUserSchema = z.object({
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 
 export const loginUserSchema = z.object({
-  password: z.string().min(6),
+  password: z.string().min(8),
 }).and(
   z.union([
     z.object({ email: z.string().email() }),
-    z.object({ username: z.string().min(3) })
+    z.object({ username: z.string().min(1) })
   ])
 );
 
