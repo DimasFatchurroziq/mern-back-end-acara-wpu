@@ -1,10 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { IUserToken } from "../interfaces/auth.interface.js";
 import { getUserData } from "../utils/jwt.util.js";
+import { IReqUser } from "../interfaces/user.interface.js";
+import { IUserToken } from "../interfaces/auth.interface.js";
 
-export interface IReqUser extends Request {
-    user?: IUserToken;
-}
+
 
 export default (req: Request<{}, {}, {}, {}>, res: Response, next: NextFunction): void => {
     const authorization = req.headers?.authorization;
@@ -27,7 +26,7 @@ export default (req: Request<{}, {}, {}, {}>, res: Response, next: NextFunction)
         return;
     }
 
-    const user = getUserData(accessToken);
+    const user: IUserToken | null = getUserData(accessToken);
 
     if (!user) {
         res.status(403).json({
@@ -37,7 +36,7 @@ export default (req: Request<{}, {}, {}, {}>, res: Response, next: NextFunction)
         return;
     }
 
-    (req as IReqUser).user = user;
+    (req as unknown as IReqUser).user = user;
 
     next();
 }
