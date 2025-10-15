@@ -24,6 +24,12 @@ export const EMAIL_SMTP_PASS: string = process.env.EMAIL_SMTP_PASS || "";
 
 export const CLIENT_HOST: string = process.env.CLIENT_HOST || "http://localhost:3000/api"; 
 
+export const CLOUDINARY_API_NAME: string = process.env.CLOUDINARY_API_NAME || "";
+
+export const CLOUDINARY_API_KEY: string = process.env.CLOUDINARY_API_KEY || "";
+
+export const CLOUDINARY_API_SECRET: string = process.env.CLOUDINARY_API_SECRET || "";
+
 
 
 

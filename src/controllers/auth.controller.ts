@@ -3,7 +3,7 @@ import userModel from "../models/user.model.js";
 import { CreateUserInput, LoginUserInput, ActivateUserInput } from "../validations/user.schema.js";
 import { encrypt } from "../utils/encryption.util.js";
 import { generateToken } from "../utils/jwt.util.js";
-import { IReqUser } from "../middlewares/auth.middleware.js";
+import { IReqUser } from "../interfaces/user.interface.js";
 
 export const authController = {
     async register(req: Request<{}, {}, CreateUserInput, {}>, res: Response, next: NextFunction): Promise<void> {
@@ -41,6 +41,7 @@ export const authController = {
                 password
             });
             res.status(201).json(createUSer); 
+            return;
         } catch (error) {
             next(error);
         }
@@ -105,7 +106,8 @@ export const authController = {
             res.status(200).json({
                 message: "Login success",
                 data: token,
-            }); return;
+            }); 
+            return;
         } catch (error){
             next(error);
         } 
@@ -128,6 +130,7 @@ export const authController = {
                 message: "Success get profile user",
                 data: result,
             });
+            return;
         } catch (error) {
             next(error);
         }

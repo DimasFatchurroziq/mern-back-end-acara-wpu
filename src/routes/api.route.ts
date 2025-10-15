@@ -6,6 +6,9 @@ import { activateUserSchema, createUserSchema, loginUserSchema } from "../valida
 import authMiddleware from "../middlewares/auth.middleware.js";
 import aclMiddleware from "../middlewares/acl.middleware.js";
 import { ROLES } from "../utils/constant.js";
+import mediaMiddleware from "../middlewares/media.middleware.js";
+import { mediaController } from "../controllers/media.controller.js";
+import response from "../helpers/response.js";
 
 const router = express.Router();
 
@@ -17,14 +20,21 @@ router.get('/auth/me', authMiddleware, authController.me);
 
 router.get('/auth/activation', validate({query: activateUserSchema}), authController.activation);
 
-router.get('/test-acl', 
+router.get('/test-acl', //hapus saja hehe
     [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
         (req: Request, res: Response, next: NextFunction) => {
-            res.status(200).json({
-                message: "OK",
-                data: "succeess",
-            });
-        }
+            response.success(res, "success", "ok");
+        },
     );
+
+router.post('/media/upload-single',
+    [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER]), mediaMiddleware.single("file")],
+    mediaController.uploadSingle
+);
+
+router.post('/media/upload-multiple',
+    [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER]), mediaMiddleware.multiple("files")],
+    mediaController.uploadMultiple
+);
 
 export default router;
