@@ -8,7 +8,7 @@ import aclMiddleware from "../middlewares/acl.middleware.js";
 import { ROLES } from "../utils/constant.js";
 import mediaMiddleware from "../middlewares/media.middleware.js";
 import { mediaController } from "../controllers/media.controller.js";
-import response from "../helpers/response.js";
+import { apiResponse } from "../helpers/apiResponse.js";
 
 const router = express.Router();
 
@@ -23,7 +23,7 @@ router.get('/auth/activation', validate({query: activateUserSchema}), authContro
 router.get('/test-acl', //hapus saja hehe
     [authMiddleware, aclMiddleware([ROLES.ADMIN, ROLES.MEMBER])],
         (req: Request, res: Response, next: NextFunction) => {
-            response.success(res, "success", "ok");
+            apiResponse.success(res, null);
         },
     );
 

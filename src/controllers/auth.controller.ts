@@ -4,6 +4,8 @@ import { CreateUserInput, LoginUserInput, ActivateUserInput } from "../validatio
 import { encrypt } from "../utils/encryption.util.js";
 import { generateToken } from "../utils/jwt.util.js";
 import { IReqUser } from "../interfaces/user.interface.js";
+import { apiResponse } from "../helpers/apiResponse.js";
+import { apiError } from "../helpers/apiError.js";
 
 export const authController = {
     async register(req: Request<{}, {}, CreateUserInput, {}>, res: Response, next: NextFunction): Promise<void> {
@@ -14,25 +16,13 @@ export const authController = {
                 username,
             });
 
-            if (existingUserByUsername) {
-                res.status(409).json({
-                    message: "This username has already been used.",
-                    data: null,
-                });
-                return;
-            };
+            if (existingUserByUsername) throw apiError.conflict("This username has already been used.");
 
             const existingUserByEmail = await userModel.findOne({
                 email,
             });
 
-            if (existingUserByEmail) {
-                res.status(409).json({
-                    message: "This email has already been used.",
-                    data: null,
-                });
-                return;
-            };
+            if (existingUserByEmail) throw apiError.conflict("This email has already been used.");
 
             const createUSer = await userModel.create({
                 fullName,
@@ -40,8 +30,10 @@ export const authController = {
                 email,
                 password
             });
-            res.status(201).json(createUSer); 
+
+            apiResponse.created(res, createUSer, "User created successfully.");
             return;
+
         } catch (error) {
             next(error);
         }
@@ -60,13 +52,7 @@ export const authController = {
                 identifier = req.body.username;
             };
 
-            if (!identifier) {
-                res.status(400).json({
-                    message: "email or username is required",
-                    data: null,
-                });
-                return;
-            };
+            if (!identifier) throw apiError.badRequest("Email or Username is required");
 
             const userByIdentifier = await userModel.findOne({
                 $or: [
@@ -80,34 +66,20 @@ export const authController = {
                 isActive : true,
             });
             
-            if(!userByIdentifier){
-                res.status(401).json({
-                    message: "credential is invalid",
-                    data: null,
-                }); 
-                return;
-            };
+            if (!userByIdentifier) throw apiError.unauthorized("asu salah cokkk");
             
             const validatePassword: boolean = encrypt(password) === userByIdentifier.password;
 
-            if(!validatePassword){
-                res.status(401).json({
-                    message: "credential is invalid",
-                    data: null,
-                }); 
-                return;
-            };
+            if (!validatePassword) throw apiError.unauthorized("Credential is invalid");
 
             const token = generateToken({
                 id: userByIdentifier._id,
                 role: userByIdentifier.role,
             });
 
-            res.status(200).json({
-                message: "Login success",
-                data: token,
-            }); 
+            apiResponse.success(res, token, "User logged in successfully.");
             return;
+
         } catch (error){
             next(error);
         } 
@@ -118,19 +90,11 @@ export const authController = {
             const user = req.user;
             const result = await userModel.findById(user?.id);
 
-            if (!result) {
-                res.status(404).json({
-                    message: "User profile not found.",
-                    data: null,
-                });
-                return;
-            };
+            if (!result) throw apiError.notFound("User profile not found");
 
-            res.status(200).json({
-                message: "Success get profile user",
-                data: result,
-            });
+            apiResponse.success(res, result, "User got profile successfully.");
             return;
+
         } catch (error) {
             next(error);
         }
@@ -144,33 +108,19 @@ export const authController = {
                 activationCode : code,
             });
 
-            if (!user) {
-                res.status(400).json({
-                    message: "Activation code is invalids",
-                    data: null,
-                });
-                return;
-            };
+            if (!user) throw apiError.badRequest("Activation code is invalid.");
 
-            if (user.isActive) {
-                res.status(400).json({
-                    message: "Akun Anda sudah aktif. Silakan login.",
-                    data: null,
-                });
-                return;
-            };
+            if (user.isActive) throw apiError.badRequest("This account has already activated.");
 
             user.isActive = true;
             user.activationCode = null;
             await user.save();
+            
+            apiResponse.success(res, user, "User activated successfully.");
+            return;    
 
-            res.status(200).json({
-                message: "Success activation user",
-                data: user,
-            });
-            return;     
         } catch (error) {
             next(error)
-        }
-    }
+        };
+    },
 };
